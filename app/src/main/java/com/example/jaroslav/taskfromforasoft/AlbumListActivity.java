@@ -12,7 +12,12 @@ public class AlbumListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_album_list);
+        String[] data = new String[30];
+        for (int i = 0; i < 30; i++) {
+            data[i] = getString(R.string.greeting);
+        }
         recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new GridLayoutManager(this,3));
+        recyclerView.setLayoutManager(new GridLayoutManager(this,1));
+        recyclerView.setAdapter(new MyAdapter(data));
     }
 }
