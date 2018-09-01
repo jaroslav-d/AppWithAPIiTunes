@@ -34,8 +34,8 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             Intent intent = new Intent(MainActivity.this,AlbumListActivity.class);
-            intent.putExtra("firstName",firstName.getText());
-            intent.putExtra("lastName",lastName.getText());
+            intent.putExtra("firstName", firstName.getText().toString());
+            intent.putExtra("lastName", lastName.getText().toString());
             startActivity(intent);
         }
     };

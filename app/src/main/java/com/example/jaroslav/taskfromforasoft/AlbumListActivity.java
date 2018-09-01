@@ -4,6 +4,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 public class AlbumListActivity extends AppCompatActivity implements NetworkThread.Callback {
     RecyclerView recyclerView;
@@ -32,6 +35,7 @@ public class AlbumListActivity extends AppCompatActivity implements NetworkThrea
             @Override
             public void run() {
                 recyclerView.setAdapter(new AlbumAdapter(network.getAlbums()));
+
             }
         });
     }

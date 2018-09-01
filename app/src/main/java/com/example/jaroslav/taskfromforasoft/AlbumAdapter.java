@@ -6,11 +6,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.example.jaroslav.taskfromforasoft.models.ITunesAlbumCollection;
 
 public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.MyViewHolder> {
     private String[] albumName;
-    private Bitmap[] photo;
+    private Bitmap[] albumPhoto;
 
     // Provide a reference to the views for each albumName item
     // Complex albumName items may need more than one view per item, and
@@ -31,8 +34,13 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.MyViewHolder
         this.albumName = albumName;
     }
 
-    public AlbumAdapter(ITunesCollection dataAlbums) {
-
+    public AlbumAdapter(ITunesAlbumCollection dataAlbums) {
+        albumName = new String[dataAlbums.getAlbumCount()];
+        albumPhoto = new Bitmap[dataAlbums.getAlbumCount()];
+        for (int i = 0; i < dataAlbums.getAlbumCount(); i++) {
+            albumName[i] = dataAlbums.getAlbumName(i);
+            albumPhoto[i] = dataAlbums.getAlbumPhoto(i);
+        }
     }
 
     // Create new views (invoked by the layout manager)
@@ -42,6 +50,8 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.MyViewHolder
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.element_view, parent, false);
+        ProgressBar progressBar = v.findViewById(R.id.progressBarInList);
+        progressBar.onWindowSystemUiVisibilityChanged(View.INVISIBLE);
         MyViewHolder vh = new MyViewHolder(v);
         return vh;
     }

@@ -1,5 +1,6 @@
 package com.example.jaroslav.taskfromforasoft;
 
+import com.example.jaroslav.taskfromforasoft.models.ITunesCollection;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 

@@ -3,6 +3,10 @@ package com.example.jaroslav.taskfromforasoft;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import com.example.jaroslav.taskfromforasoft.models.ITunesAlbumCollection;
+import com.example.jaroslav.taskfromforasoft.models.ITunesCollection;
+import com.example.jaroslav.taskfromforasoft.models.ITunesSearchArtist;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -13,7 +17,7 @@ import java.net.URL;
 import javax.net.ssl.HttpsURLConnection;
 
 public class NetworkThread extends Thread {
-    private ITunesCollection dataAlbums;
+    private ITunesAlbumCollection dataAlbums;
     private String errorMassage = null;
     private String responseRawData;
     private String firstName;
@@ -37,7 +41,7 @@ public class NetworkThread extends Thread {
         this.lastName = lastName;
     }
 
-    public ITunesCollection getAlbums() {
+    public ITunesAlbumCollection getAlbums() {
         return dataAlbums;
     }
 
@@ -53,15 +57,15 @@ public class NetworkThread extends Thread {
                     "&entity=musicArtist&limit=1");
             readStream(url);
             ITunesCollection searchData = new JSONParser().parse(responseRawData);
-            int artistId = searchData.getArtistID();
+            int artistId = 10; //searchData.getArtistID();
             url = new URL("http://itunes.apple.com" +
                     "/lookup?id=" +
                      artistId +
                     "&entity=album");
             readStream(url);
-            dataAlbums = new JSONParser().parse(responseRawData);
-            for (int i = 1; i < dataAlbums.getResultCount()+1; i++) {
-                dataAlbums.setPhotoForAlbum(i, unloadPhoto(dataAlbums.getArtworkUrl100(i)));
+            dataAlbums = (ITunesAlbumCollection) new JSONParser().parse(responseRawData);
+            for (int i = 0; i < dataAlbums.getAlbumCount(); i++) {
+                dataAlbums.setPhotoForAlbum(i, unloadPhoto(dataAlbums.getURLPhoto(i)));
             }
             callback.unloadData();
         } catch (MalformedURLException e) {
