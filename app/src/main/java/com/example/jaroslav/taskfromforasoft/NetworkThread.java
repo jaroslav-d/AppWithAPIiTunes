@@ -18,6 +18,7 @@ import java.net.URL;
 import javax.net.ssl.HttpsURLConnection;
 
 public class NetworkThread extends Thread {
+    private ITunesCollectionAlbum collectionAlbum;
     private String errorMassage = null;
     private String responseRawData;
     private String firstName;
@@ -42,7 +43,7 @@ public class NetworkThread extends Thread {
     }
 
     public ITunesCollectionAlbum getAlbums() {
-        return dataAlbums;
+        return collectionAlbum;
     }
 
     @Override
@@ -53,13 +54,12 @@ public class NetworkThread extends Thread {
             URL url = new URL("https://itunes.apple.com/search?term=" + query + "&entity=musicArtist");
             readStream(url);
             ITunesCollectionArtist collectionArtist = new JSONParser().parse(responseRawData, ITunesCollectionArtist.class);
-            int artistId = collectionArtist.getResults().get(0).artistId;
+            int artistId = collectionArtist.getResults().get(0).getArtistId();
             url = new URL("https://itunes.apple.com/lookup?id=" + artistId + "&entity=album");
             readStream(url);
-            ITunesCollectionAlbum collectionAlbum = new JSONParser().parse(responseRawData, ITunesCollectionAlbum.class);
+            collectionAlbum = new JSONParser().parse(responseRawData, ITunesCollectionAlbum.class);
             for (ITunesItemAlbum itemAlbum : collectionAlbum.getResults()) {
-                //dataAlbums.setPhotoForAlbum(i, unloadPhoto(dataAlbums.getURLPhoto(i)));
-                // itemAlbum
+                itemAlbum.setPhoto(unloadPhoto(itemAlbum.getPhotoUrl()));
             }
             callback.unloadData();
         } catch (MalformedURLException e) {

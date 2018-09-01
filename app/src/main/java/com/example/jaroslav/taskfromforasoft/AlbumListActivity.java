@@ -6,6 +6,8 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 public class AlbumListActivity extends AppCompatActivity implements NetworkThread.Callback {
     RecyclerView recyclerView;
     NetworkThread network;
@@ -14,10 +16,6 @@ public class AlbumListActivity extends AppCompatActivity implements NetworkThrea
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_album_list);
-        String[] data = new String[10];
-        for (int i = 0; i < 10; i++) {
-            data[i] = getString(R.string.greeting);
-        }
         network = new NetworkThread("network");
         network.setArtistName(getIntent().getStringExtra("firstName"),
                 getIntent().getStringExtra("lastName"));
@@ -26,7 +24,6 @@ public class AlbumListActivity extends AppCompatActivity implements NetworkThrea
         TextView textView = findViewById(R.id.textInList);
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new GridLayoutManager(this,1));
-        recyclerView.setAdapter(new AlbumAdapter(data));
     }
 
     public void unloadData() {
