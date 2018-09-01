@@ -1,18 +1,13 @@
 package com.example.jaroslav.taskfromforasoft;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 public class JSONParser {
-    String jsonString;
 
-    public JSONParser(String jsonString) {
-        try {
-            JSONObject jsonObject = new JSONObject(jsonString);
-            jsonObject.getInt("resultCount");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+    public ITunesCollection parse(String jsonString) {
+        GsonBuilder builder = new GsonBuilder();
+        Gson gson = builder.create();
+        return gson.fromJson(jsonString, ITunesCollection.class);
     }
-
 }
