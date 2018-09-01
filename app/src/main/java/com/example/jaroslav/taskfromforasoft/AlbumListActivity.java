@@ -4,8 +4,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class AlbumListActivity extends AppCompatActivity implements NetworkThread.Callback {
@@ -25,6 +23,7 @@ public class AlbumListActivity extends AppCompatActivity implements NetworkThrea
                 getIntent().getStringExtra("lastName"));
         network.setCallback(this);
         network.start();
+        TextView textView = findViewById(R.id.textInList);
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new GridLayoutManager(this,1));
         recyclerView.setAdapter(new AlbumAdapter(data));
@@ -35,7 +34,6 @@ public class AlbumListActivity extends AppCompatActivity implements NetworkThrea
             @Override
             public void run() {
                 recyclerView.setAdapter(new AlbumAdapter(network.getAlbums()));
-
             }
         });
     }

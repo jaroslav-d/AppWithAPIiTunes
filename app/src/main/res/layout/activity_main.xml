@@ -44,7 +44,8 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:hint="@string/first_name"
-                android:inputType="textPersonName" />
+                android:inputType="textPersonName"
+                android:text="@string/lindsey" />
 
             <EditText
                 android:id="@+id/lastName"
@@ -53,7 +54,8 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:hint="@string/last_name"
-                android:inputType="textPersonName" />
+                android:inputType="textPersonName"
+                android:text="@string/stirling" />
 
         </LinearLayout>
 

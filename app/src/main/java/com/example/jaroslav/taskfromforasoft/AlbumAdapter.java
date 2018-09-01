@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.jaroslav.taskfromforasoft.models.ITunesAlbumCollection;
+import com.example.jaroslav.taskfromforasoft.models.collection.ITunesCollectionAlbum;
 
 public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.MyViewHolder> {
     private String[] albumName;
@@ -20,12 +20,14 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.MyViewHolder
     // you provide access to all the views for a albumName item in a view holder
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         // each albumName item is just a string in this case
-        public TextView textInList;
-        public ImageView imageInList;
+        public ProgressBar progressBarList;
+        public TextView textList;
+        public ImageView imageList;
         public MyViewHolder(View v) {
             super(v);
-            textInList = v.findViewById(R.id.textInList);
-            imageInList = v.findViewById(R.id.imageInList);
+            textList = v.findViewById(R.id.textInList);
+            imageList = v.findViewById(R.id.imageInList);
+            progressBarList = v.findViewById(R.id.progressBarInList);
         }
     }
 
@@ -34,7 +36,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.MyViewHolder
         this.albumName = albumName;
     }
 
-    public AlbumAdapter(ITunesAlbumCollection dataAlbums) {
+    public AlbumAdapter(ITunesCollectionAlbum dataAlbums) {
         albumName = new String[dataAlbums.getAlbumCount()];
         albumPhoto = new Bitmap[dataAlbums.getAlbumCount()];
         for (int i = 0; i < dataAlbums.getAlbumCount(); i++) {
@@ -45,13 +47,10 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.MyViewHolder
 
     // Create new views (invoked by the layout manager)
     @Override
-    public AlbumAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent,
-                                                        int viewType) {
+    public AlbumAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.element_view, parent, false);
-        ProgressBar progressBar = v.findViewById(R.id.progressBarInList);
-        progressBar.onWindowSystemUiVisibilityChanged(View.INVISIBLE);
         MyViewHolder vh = new MyViewHolder(v);
         return vh;
     }
@@ -61,7 +60,11 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.MyViewHolder
     public void onBindViewHolder(MyViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        holder.textInList.setText(albumName[position]);
+        holder.textList.setText(albumName[position]);
+        if (albumPhoto != null) {
+            holder.progressBarList.onWindowSystemUiVisibilityChanged(View.INVISIBLE);
+            holder.imageList.setImageBitmap(albumPhoto[position]);
+        }
     }
 
     // Return the size of your dataset (invoked by the layout manager)

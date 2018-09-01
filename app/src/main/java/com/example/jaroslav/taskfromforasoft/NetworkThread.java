@@ -3,9 +3,10 @@ package com.example.jaroslav.taskfromforasoft;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-import com.example.jaroslav.taskfromforasoft.models.ITunesAlbumCollection;
-import com.example.jaroslav.taskfromforasoft.models.ITunesCollection;
-import com.example.jaroslav.taskfromforasoft.models.ITunesSearchArtist;
+import com.example.jaroslav.taskfromforasoft.models.collection.ITunesCollectionAlbum;
+import com.example.jaroslav.taskfromforasoft.models.collection.ITunesCollectionArtist;
+import com.example.jaroslav.taskfromforasoft.models.JSONParser;
+import com.example.jaroslav.taskfromforasoft.models.item.ITunesItemAlbum;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,7 +18,6 @@ import java.net.URL;
 import javax.net.ssl.HttpsURLConnection;
 
 public class NetworkThread extends Thread {
-    private ITunesAlbumCollection dataAlbums;
     private String errorMassage = null;
     private String responseRawData;
     private String firstName;
@@ -41,7 +41,7 @@ public class NetworkThread extends Thread {
         this.lastName = lastName;
     }
 
-    public ITunesAlbumCollection getAlbums() {
+    public ITunesCollectionAlbum getAlbums() {
         return dataAlbums;
     }
 
@@ -49,23 +49,17 @@ public class NetworkThread extends Thread {
     public void run() {
         super.run();
         try {
-            URL url = new URL("https://itunes.apple.com" +
-                    "/search?term=" +
-                    firstName +
-                    "+" +
-                    lastName +
-                    "&entity=musicArtist&limit=1");
+            String query = firstName + "+" + lastName;
+            URL url = new URL("https://itunes.apple.com/search?term=" + query + "&entity=musicArtist");
             readStream(url);
-            ITunesCollection searchData = new JSONParser().parse(responseRawData);
-            int artistId = 10; //searchData.getArtistID();
-            url = new URL("http://itunes.apple.com" +
-                    "/lookup?id=" +
-                     artistId +
-                    "&entity=album");
+            ITunesCollectionArtist collectionArtist = new JSONParser().parse(responseRawData, ITunesCollectionArtist.class);
+            int artistId = collectionArtist.getResults().get(0).artistId;
+            url = new URL("https://itunes.apple.com/lookup?id=" + artistId + "&entity=album");
             readStream(url);
-            dataAlbums = (ITunesAlbumCollection) new JSONParser().parse(responseRawData);
-            for (int i = 0; i < dataAlbums.getAlbumCount(); i++) {
-                dataAlbums.setPhotoForAlbum(i, unloadPhoto(dataAlbums.getURLPhoto(i)));
+            ITunesCollectionAlbum collectionAlbum = new JSONParser().parse(responseRawData, ITunesCollectionAlbum.class);
+            for (ITunesItemAlbum itemAlbum : collectionAlbum.getResults()) {
+                //dataAlbums.setPhotoForAlbum(i, unloadPhoto(dataAlbums.getURLPhoto(i)));
+                // itemAlbum
             }
             callback.unloadData();
         } catch (MalformedURLException e) {
@@ -73,12 +67,12 @@ public class NetworkThread extends Thread {
         }
     }
 
-    public void readStream(URL url) {
+    private void readStream(URL url) {
         try {
             HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
             connection.connect();
             InputStream stream = connection.getInputStream();
-            int maxReadSize = 1024;
+            int maxReadSize = 1000000;
             Reader reader = new InputStreamReader(stream, "UTF-8");
             char[] rawBuffer = new char[maxReadSize];
             int readSize;
@@ -99,7 +93,7 @@ public class NetworkThread extends Thread {
         }
     }
 
-    public Bitmap unloadPhoto(String urlString) {
+    private Bitmap unloadPhoto(String urlString) {
         try {
             URL url = new URL(urlString);
             return BitmapFactory.decodeStream(url.openConnection().getInputStream());
@@ -110,7 +104,7 @@ public class NetworkThread extends Thread {
         }
     }
 
-    public Bitmap unloadPhoto(URL url) {
+    private Bitmap unloadPhoto(URL url) {
         try {
             return BitmapFactory.decodeStream(url.openConnection().getInputStream());
         } catch (IOException e) {
