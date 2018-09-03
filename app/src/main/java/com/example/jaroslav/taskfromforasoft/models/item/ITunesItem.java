@@ -1,7 +1,5 @@
 package com.example.jaroslav.taskfromforasoft.models.item;
 
-import android.graphics.Bitmap;
-
 class ITunesItem {
     private String wrapperType;
     private String collectionType;
@@ -14,23 +12,23 @@ class ITunesItem {
         return artistId;
     }
 
-    public String getWrapperType() {
+    protected String getWrapperType() {
         return wrapperType;
     }
 
-    public String getCollectionType() {
+    protected String getCollectionType() {
         return collectionType;
     }
 
-    public int getCollectionId() {
+    protected int getCollectionId() {
         return collectionId;
     }
 
-    public int getAmgArtistId() {
+    protected int getAmgArtistId() {
         return amgArtistId;
     }
 
-    public String getName(){
+    public String getAlbumName(){
         return collectionName;
     }
 }

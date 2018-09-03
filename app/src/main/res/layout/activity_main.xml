@@ -38,24 +38,14 @@
                 android:textAppearance="@style/TextAppearance.AppCompat" />
 
             <EditText
-                android:id="@+id/firstName"
+                android:id="@+id/nameArtist"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
-                android:hint="@string/first_name"
+                android:hint="@string/name_artist"
                 android:inputType="textPersonName"
-                android:text="@string/lindsey" />
-
-            <EditText
-                android:id="@+id/lastName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:ems="10"
-                android:hint="@string/last_name"
-                android:inputType="textPersonName"
-                android:text="@string/stirling" />
+                android:text="@string/lindsey_stirling" />
 
         </LinearLayout>
 

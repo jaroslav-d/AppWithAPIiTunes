@@ -10,17 +10,15 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 
 public class MainActivity extends AppCompatActivity {
-    EditText firstName;
-    EditText lastName;
+    EditText nameArtist;
     Button button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        firstName = findViewById(R.id.firstName);
-        lastName = findViewById(R.id.lastName);
         button = findViewById(R.id.button);
+        nameArtist = findViewById(R.id.nameArtist);
         LinearLayout mainLinearLayout = findViewById(R.id.mainLinearLayout);
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             mainLinearLayout.setOrientation(LinearLayout.VERTICAL);
@@ -34,8 +32,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             Intent intent = new Intent(MainActivity.this,AlbumListActivity.class);
-            intent.putExtra("firstName", firstName.getText().toString());
-            intent.putExtra("lastName", lastName.getText().toString());
+            intent.putExtra("nameArtist", nameArtist.getText().toString());
             startActivity(intent);
         }
     };

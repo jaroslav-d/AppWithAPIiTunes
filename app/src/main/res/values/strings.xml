@@ -1,10 +1,10 @@
 <resources>
     <string name="app_name">Task from Fora Soft</string>
     <string name="greeting">Welcome to the test \n task from Fora Soft.\n Please enter the artist's data \n</string>
-    <string name="first_name">First Name</string>
-    <string name="last_name">Last Name</string>
+    <string name="name_artist">Name Artist or Band</string>
     <string name="search">Search</string>
     <string name="todo">TODO</string>
-    <string name="lindsey">lindsey</string>
-    <string name="stirling">stirling</string>
+    <string name="lindsey_stirling">lindsey stirling</string>
+    <string name="connect_error">нет соединения с сетью</string>
+    <string name="artist_error">исполнитель с таким именем не найден</string>
 </resources>

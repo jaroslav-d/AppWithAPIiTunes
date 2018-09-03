@@ -14,7 +14,7 @@ public class ITunesItemAlbum extends ITunesItem {
         photoFromUrl100 = photo;
     }
 
-    public Bitmap getPhoto() {
-        return photoFromUrl100;
-    }
+    public Bitmap getPhoto() { return photoFromUrl100; }
+
+    public int getAlbumId() { return getCollectionId(); }
 }

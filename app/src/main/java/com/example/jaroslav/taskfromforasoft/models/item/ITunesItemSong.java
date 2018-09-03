@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 public class ITunesItemSong extends ITunesItem {
     private String artworkUrl100;
     private Bitmap photoFromUrl100;
+    private String trackName;
 
     public String getPhotoUrl() {
         return artworkUrl100;
@@ -16,5 +17,11 @@ public class ITunesItemSong extends ITunesItem {
 
     public Bitmap getPhoto() {
         return photoFromUrl100;
+    }
+
+    public int getSongId() { return getCollectionId(); }
+
+    public String getTrackName() {
+        return trackName;
     }
 }

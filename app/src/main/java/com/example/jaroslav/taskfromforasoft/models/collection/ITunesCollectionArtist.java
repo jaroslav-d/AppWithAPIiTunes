@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class ITunesCollectionArtist extends ITunesCollection {
     private ArrayList<ITunesItemArtist> results;
 
-    public ArrayList<ITunesItemArtist> getResults() {
+    public ArrayList<ITunesItemArtist> getAll() {
         return results;
     }
 }
