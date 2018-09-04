@@ -2,6 +2,7 @@ package com.example.jaroslav.taskfromforasoft.models.item;
 
 import android.graphics.Bitmap;
 
+// This class contains special variables for the list of songs returned from itunes
 public class ITunesItemSong extends ITunesItem {
     private String artworkUrl100;
     private Bitmap photoFromUrl100;

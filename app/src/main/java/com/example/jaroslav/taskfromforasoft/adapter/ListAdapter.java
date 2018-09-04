@@ -18,39 +18,18 @@ import com.example.jaroslav.taskfromforasoft.models.item.ITunesItemSong;
 
 import java.util.ArrayList;
 
+// This class implements the adapter for activity with the type of recycler.
+// This adapter is needed to create the content of the list in accordance with
+// the specified layout of one line. The row layout is in resources named element_view
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.MyViewHolder> {
 
     protected ArrayList<String> nameElement;
     protected ArrayList<Bitmap> photoElement;
-    protected ArrayList<Integer> albumIDs;
 
     public ListAdapter(){}
 
-    public void createElements(ITunesCollectionSong data) {
-        nameElement = new ArrayList<>();
-        photoElement = new ArrayList<>();
-        for (ITunesItemSong itemSong : data.getAll()) {
-            nameElement.add(itemSong.getTrackName());
-            photoElement.add(itemSong.getPhoto());
-        }
-    }
-
-    public void createElements(ITunesCollectionAlbum data) {
-        nameElement = new ArrayList<>();
-        photoElement = new ArrayList<>();
-        albumIDs = new ArrayList<>();
-        for (ITunesItemAlbum itemSong : data.getAll()) {
-            nameElement.add(itemSong.getAlbumName());
-            photoElement.add(itemSong.getPhoto());
-            albumIDs.add(itemSong.getAlbumId());
-        }
-    }
-
-    // Provide a reference to the views for each albumName item
-    // Complex albumName items may need more than one view per item, and
-    // you provide access to all the views for a albumName item in a view holder
+    // Here is a reference to the views for each view element
     public static class MyViewHolder extends RecyclerView.ViewHolder {
-        // each albumName item is just a string in this case
         public TextView textList;
         public ImageView imageList;
         private Intent intent;
@@ -63,14 +42,18 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.MyViewHolder> 
             v.setOnClickListener(clickListener);
         }
 
+        // Creates an intention for moving on to the next activity
         public void setIntent(Intent intent) {
             this.intent = intent;
         }
 
+        // Sets the condition whether the intent will be transferred to another
+        // Activity when you click on the list item
         public void setClick(boolean click) {
             this.click = click;
         }
 
+        // Implements an interface for clicking on a list item
         private View.OnClickListener clickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,7 +63,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.MyViewHolder> 
         };
     }
 
-    // Create new views (invoked by the layout manager)
+    // Create new views (invoked by the layout manager, which is in the activity)
     @Override
     @NonNull
     public ListAdapter.MyViewHolder  onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -93,7 +76,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.MyViewHolder> 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        // - get element from your dataset at this position
+        // - get element from dataset at this position
         // - replace the contents of the view with that element
         holder.textList.setText(nameElement.get(position));
         if (photoElement.get(position) != null) {
@@ -102,7 +85,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.MyViewHolder> 
         }
     }
 
-    // Return the size of your dataset (invoked by the layout manager)
+    // Return the size of dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {return 0;}
 }

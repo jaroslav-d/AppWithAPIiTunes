@@ -17,22 +17,26 @@ public class ListActivity extends AppCompatActivity implements AlbumNetworkThrea
     public void unloadData() {
     }
 
+    // displays no connection message
     @Override
     public void outputMessageNoConnection() {
         textError.post(new Runnable() {
             @Override
             public void run() {
+                progressBar.setVisibility(View.INVISIBLE);
                 textError.setVisibility(View.VISIBLE);
                 textError.setText(R.string.connect_error);
             }
         });
     }
 
+    // displays a message that there is no such artist
     @Override
     public void outputMessageNoArtist() {
         textError.post(new Runnable() {
             @Override
             public void run() {
+                progressBar.setVisibility(View.INVISIBLE);
                 textError.setVisibility(View.VISIBLE);
                 textError.setText(R.string.artist_error);
             }

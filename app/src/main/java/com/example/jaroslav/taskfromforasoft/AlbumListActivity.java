@@ -15,13 +15,16 @@ public class AlbumListActivity extends ListActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_album_list);
+        // set a new thread for the connection and send the parameters
         network = new AlbumNetworkThread("network");
         network.setArtistName(getIntent().getStringExtra("nameArtist"));
         network.setCallback(this);
         network.start();
+        // determine the elements of the activity layout for further work with them
         textError = findViewById(R.id.textErrorAlbum);
         progressBar = findViewById(R.id.progressBarAlbum);
         recyclerView = findViewById(R.id.recyclerViewAlbum);
+        // set the adapter manager
         recyclerView.setLayoutManager(new GridLayoutManager(this,1));
     }
 //
@@ -50,6 +53,7 @@ public class AlbumListActivity extends ListActivity{
         recyclerView.post(new Runnable() {
             @Override
             public void run() {
+                // we obtain from the connection stream already converted data obtained
                 progressBar.setVisibility(View.INVISIBLE);
                 AlbumAdapter adapter = new AlbumAdapter(network.getAlbums());
                 recyclerView.setAdapter(adapter);

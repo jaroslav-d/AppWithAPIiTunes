@@ -6,9 +6,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+// This class creates a data model for the album list
 public class ITunesCollectionAlbum extends ITunesCollection {
     private ArrayList<ITunesItemAlbum> results;
 
+    // This method returns a list of albums and only
+    // a list of albums and, in addition, sorts this list by album name
     public ArrayList<ITunesItemAlbum> getAll() {
         // This code sort albums on name albums
         ArrayList<ITunesItemAlbum> sortedList = new ArrayList<>(results.subList(1, results.size()));

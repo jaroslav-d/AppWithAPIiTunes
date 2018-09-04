@@ -11,6 +11,9 @@ import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
 
+// This is the main thread and it implements the methods of
+// connecting and reading data with itunes.
+// Implements callback methods for displaying data on the screen.
 public class NetworkThread extends Thread {
     protected String responseRawData;
     protected Callback callback;
@@ -19,12 +22,14 @@ public class NetworkThread extends Thread {
         super(name);
     }
 
+    // create callback
     public interface Callback {
         void unloadData();
         void outputMessageNoConnection();
         void outputMessageNoArtist();
     }
 
+    // set callback
     public void setCallback(Callback callback) {
         this.callback = callback;
     }
@@ -34,6 +39,7 @@ public class NetworkThread extends Thread {
         super.run();
     }
 
+    // This method is required to connect and retrieve data json
     protected void readStream(URL url) throws IOException {
         HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
         connection.connect();
@@ -55,11 +61,13 @@ public class NetworkThread extends Thread {
         connection.disconnect();
     }
 
+    // This method is required to download a photo from the URL address
     protected Bitmap unloadPhoto(String urlString) throws IOException {
         URL url = new URL(urlString);
         return BitmapFactory.decodeStream(url.openConnection().getInputStream());
     }
 
+    // This method is required to download a photo from the URL address
     protected Bitmap unloadPhoto(URL url) throws IOException{
         return BitmapFactory.decodeStream(url.openConnection().getInputStream());
     }

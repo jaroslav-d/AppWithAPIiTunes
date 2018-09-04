@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+// This class is needed to get a list of songs by their id
 public class SongNetworkThread extends NetworkThread {
     protected ITunesCollectionSong collectionSong;
     protected int albumId;
@@ -28,16 +29,22 @@ public class SongNetworkThread extends NetworkThread {
         super.run();
         try {
             URL url = new URL("https://itunes.apple.com/lookup?id="+ albumId +"&entity=song");
+            // open the flow to get raw data from itunes
             readStream(url);
+            // convert the data to the desired format for further processing
             collectionSong = new JSONParser().parse(responseRawData, ITunesCollectionSong.class);
+            // for the created model of the list of songs we load necessary pictures
             for (ITunesItemSong itemSong : collectionSong.getAll()) {
                 itemSong.setPhoto(unloadPhoto(itemSong.getPhotoUrl()));
             }
+            // goes back to the activity that created it and launched
             callback.unloadData();
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+            //goes back to the activity that created it
+            // and run it to display the error message
             callback.outputMessageNoConnection();
         }
     }
