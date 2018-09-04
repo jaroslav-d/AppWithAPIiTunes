@@ -13,6 +13,9 @@ import java.util.ArrayList;
 // This adapter for element view in album list activity
 public class AlbumAdapter extends ListAdapter {
     protected ArrayList<Integer> albumIDs;
+    private String mainTextSong;
+    private Bitmap mainPhotoSong;
+    private ArrayList<String> genreAndPrice;
 
     public ArrayList<String> getAlbumNames() {
         return nameElement;
@@ -44,19 +47,25 @@ public class AlbumAdapter extends ListAdapter {
         nameElement = new ArrayList<>();
         photoElement = new ArrayList<>();
         albumIDs = new ArrayList<>();
+        genreAndPrice = new ArrayList<>();
         for (ITunesItemAlbum itemSong : dataAlbums.getAll()) {
             nameElement.add(itemSong.getAlbumName());
             photoElement.add(itemSong.getPhoto());
             albumIDs.add(itemSong.getAlbumId());
+            genreAndPrice.add("Genre: " + itemSong.getGenre() + "\n" + "Price: " + itemSong.getPrice());
         }
     }
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         super.onBindViewHolder(holder,position);
+        mainTextSong = nameElement.get(position) + "\n" + genreAndPrice.get(position);
+        mainPhotoSong = photoElement.get(position);
         // Create intent for loading a songs list on album
         Intent intent = new Intent(holder.textList.getContext(),SongListActivity.class);
-        intent.putExtra("albumID",albumIDs.get(position));
+        intent.putExtra("albumID", albumIDs.get(position));
+        intent.putExtra("mainTextSong",mainTextSong);
+        intent.putExtra("mainPhotoSong", mainPhotoSong);
         holder.setIntent(intent);
     }
 

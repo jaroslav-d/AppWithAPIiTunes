@@ -1,0 +1,639 @@
+Index: app/src/main/java/com/example/jaroslav/taskfromforasoft/adapter/AlbumAdapter.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/jaroslav/taskfromforasoft/adapter/AlbumAdapter.java	(date 1536006591873)
++++ app/src/main/java/com/example/jaroslav/taskfromforasoft/adapter/AlbumAdapter.java	(date 1536006591873)
+@@ -0,0 +1,54 @@
++package com.example.jaroslav.taskfromforasoft.adapter;
++
++import android.content.Intent;
++import android.graphics.Bitmap;
++import android.support.annotation.NonNull;
++
++import com.example.jaroslav.taskfromforasoft.SongListActivity;
++import com.example.jaroslav.taskfromforasoft.models.collection.ITunesCollectionAlbum;
++
++import java.util.ArrayList;
++
++public class AlbumAdapter extends ListAdapter {
++
++    public ArrayList<String> getAlbumNames() {
++        return nameElement;
++    }
++
++    public ArrayList<Bitmap> getAlbumPhotos() {
++        return photoElement;
++    }
++
++    public ArrayList<Integer> getAlbumIDs() {
++        return albumIDs;
++    }
++
++    public void setAlbumNames(ArrayList<String> albumName) {
++        this.nameElement = albumName;
++    }
++
++    public void setAlbumPhotos(ArrayList<Bitmap> albumPhoto) {
++        this.photoElement = albumPhoto;
++    }
++
++    public void setAlbumIDs(ArrayList<Integer> albumIDs) {
++        this.albumIDs = albumIDs;
++    }
++
++    public AlbumAdapter(ITunesCollectionAlbum dataAlbums) {
++        createElements(dataAlbums);
++    }
++
++    @Override
++    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
++        super.onBindViewHolder(holder,position);
++        // Create intent for search a songs in album
++        Intent intent = new Intent(holder.textList.getContext(),SongListActivity.class);
++        intent.putExtra("albumID",albumIDs.get(position));
++        holder.setIntent(intent);
++    }
++
++    public int getItemCount() {
++        return nameElement.size();
++    }
++}
+Index: app/src/main/java/com/example/jaroslav/taskfromforasoft/AlbumAdapter.java
+===================================================================
+--- app/src/main/java/com/example/jaroslav/taskfromforasoft/AlbumAdapter.java	(revision 04e4d70728b3fc111420913258516fcb6e57f893)
++++ app/src/main/java/com/example/jaroslav/taskfromforasoft/adapter/ListAdapter.java	(date 1536006591816)
+@@ -1,9 +1,7 @@
+-package com.example.jaroslav.taskfromforasoft;
++package com.example.jaroslav.taskfromforasoft.adapter;
+ 
+ import android.content.Intent;
+ import android.graphics.Bitmap;
+-import android.os.Parcel;
+-import android.os.Parcelable;
+ import android.support.annotation.NonNull;
+ import android.support.v7.widget.RecyclerView;
+ import android.view.LayoutInflater;
+@@ -12,53 +10,43 @@
+ import android.widget.ImageView;
+ import android.widget.TextView;
+ 
++import com.example.jaroslav.taskfromforasoft.R;
+ import com.example.jaroslav.taskfromforasoft.models.collection.ITunesCollectionAlbum;
++import com.example.jaroslav.taskfromforasoft.models.collection.ITunesCollectionSong;
+ import com.example.jaroslav.taskfromforasoft.models.item.ITunesItemAlbum;
++import com.example.jaroslav.taskfromforasoft.models.item.ITunesItemSong;
+ 
+ import java.util.ArrayList;
+ 
+-public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.MyViewHolder> {
+-    private ArrayList<String> albumName;
+-    private ArrayList<Bitmap> albumPhoto;
+-    private ArrayList<Integer> albumIDs;
+-
+-    public ArrayList<String> getAlbumName() {
+-        return albumName;
+-    }
+-
+-    public ArrayList<Bitmap> getAlbumPhoto() {
+-        return albumPhoto;
+-    }
++public class ListAdapter extends RecyclerView.Adapter<ListAdapter.MyViewHolder> {
+ 
+-    public ArrayList<Integer> getAlbumIDs() {
+-        return albumIDs;
+-    }
++    protected ArrayList<String> nameElement;
++    protected ArrayList<Bitmap> photoElement;
++    protected ArrayList<Integer> albumIDs;
+ 
+-    public void setAlbumName(ArrayList<String> albumName) {
+-        this.albumName = albumName;
+-    }
++    public ListAdapter(){}
+ 
+-    public void setAlbumPhoto(ArrayList<Bitmap> albumPhoto) {
+-        this.albumPhoto = albumPhoto;
+-    }
+-
+-    public void setAlbumIDs(ArrayList<Integer> albumIDs) {
+-        this.albumIDs = albumIDs;
++    public void createElements(ITunesCollectionSong data) {
++        nameElement = new ArrayList<>();
++        photoElement = new ArrayList<>();
++        for (ITunesItemSong itemSong : data.getAll()) {
++            nameElement.add(itemSong.getName());
++            photoElement.add(itemSong.getPhoto());
++        }
+     }
+ 
+-
+-    public AlbumAdapter(ITunesCollectionAlbum dataAlbums) {
+-        albumName = new ArrayList<>();
+-        albumPhoto = new ArrayList<>();
++    public void createElements(ITunesCollectionAlbum data) {
++        nameElement = new ArrayList<>();
++        photoElement = new ArrayList<>();
+         albumIDs = new ArrayList<>();
+-        for (ITunesItemAlbum itemAlbum : dataAlbums.getAll()) {
+-            albumName.add(itemAlbum.getName());
+-            albumPhoto.add(itemAlbum.getPhoto());
+-            albumIDs.add(itemAlbum.getAlbumId());
++        for (ITunesItemAlbum itemSong : data.getAll()) {
++            nameElement.add(itemSong.getName());
++            photoElement.add(itemSong.getPhoto());
++            albumIDs.add(itemSong.getAlbumId());
+         }
+     }
+ 
+-    public AlbumAdapter(){}
++
+ 
+     // Provide a reference to the views for each albumName item
+     // Complex albumName items may need more than one view per item, and
+@@ -68,14 +56,12 @@
+         public TextView textList;
+         public ImageView imageList;
+         private Intent intent;
+-        private View view;
+ 
+         public MyViewHolder(View v) {
+             super(v);
+             textList = v.findViewById(R.id.textInList);
+             imageList = v.findViewById(R.id.imageInList);
+             v.setOnClickListener(clickListener);
+-            view = v;
+         }
+ 
+         public void setIntent(Intent intent) {
+@@ -93,7 +79,7 @@
+     // Create new views (invoked by the layout manager)
+     @Override
+     @NonNull
+-    public AlbumAdapter.MyViewHolder  onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
++    public ListAdapter.MyViewHolder  onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+         // create a new view
+         View v = LayoutInflater.from(parent.getContext())
+                 .inflate(R.layout.element_view, parent, false);
+@@ -103,23 +89,16 @@
+     // Replace the contents of a view (invoked by the layout manager)
+     @Override
+     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+-        // Create intent for search a songs in album
+-        Intent intent = new Intent(holder.view.getContext(),SongListActivity.class);
+-        intent.putExtra("albumID",albumIDs.get(position));
+-        holder.setIntent(intent);
+-
+         // - get element from your dataset at this position
+         // - replace the contents of the view with that element
+-        holder.textList.setText(albumName.get(position));
+-        if (albumPhoto.get(position) != null) {
+-            holder.imageList.setImageBitmap(albumPhoto.get(position));
++        holder.textList.setText(nameElement.get(position));
++        if (photoElement.get(position) != null) {
++            holder.imageList.setImageBitmap(photoElement.get(position));
+             holder.imageList.setVisibility(View.VISIBLE);
+         }
+     }
+ 
+     // Return the size of your dataset (invoked by the layout manager)
+     @Override
+-    public int getItemCount() {
+-        return albumName.size();
+-    }
++    public int getItemCount() {return 0;}
+ }
+Index: app/src/main/java/com/example/jaroslav/taskfromforasoft/adapter/SongAdapter.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/jaroslav/taskfromforasoft/adapter/SongAdapter.java	(date 1535996234441)
++++ app/src/main/java/com/example/jaroslav/taskfromforasoft/adapter/SongAdapter.java	(date 1535996234441)
+@@ -0,0 +1,20 @@
++package com.example.jaroslav.taskfromforasoft.adapter;
++
++import android.support.annotation.NonNull;
++
++import com.example.jaroslav.taskfromforasoft.models.collection.ITunesCollectionSong;
++
++public class SongAdapter extends ListAdapter {
++
++    public SongAdapter(ITunesCollectionSong dataSong) {
++        createElements(dataSong);
++    }
++
++    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
++        super.onBindViewHolder(holder,position);
++    }
++
++    public int getItemCount() {
++        return nameElement.size();
++    }
++}
+Index: app/src/main/java/com/example/jaroslav/taskfromforasoft/networkthread/SongNetworkThread.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.jaroslav.taskfromforasoft.networkthread;\n\npublic class SongNetworkThread extends NetworkThread {\n\n    public SongNetworkThread(String name) {\n        super(name);\n    }\n\n    @Override\n    public void run() {\n        super.run();\n    }\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/jaroslav/taskfromforasoft/networkthread/SongNetworkThread.java	(revision 04e4d70728b3fc111420913258516fcb6e57f893)
++++ app/src/main/java/com/example/jaroslav/taskfromforasoft/networkthread/SongNetworkThread.java	(date 1536005501907)
+@@ -1,13 +1,39 @@
+ package com.example.jaroslav.taskfromforasoft.networkthread;
+ 
++import com.example.jaroslav.taskfromforasoft.models.JSONParser;
++import com.example.jaroslav.taskfromforasoft.models.collection.ITunesCollection;
++import com.example.jaroslav.taskfromforasoft.models.collection.ITunesCollectionSong;
++
++import java.io.IOException;
++import java.net.MalformedURLException;
++import java.net.URL;
++
+ public class SongNetworkThread extends NetworkThread {
++    protected ITunesCollectionSong collectionSong;
++    protected int albumId;
+ 
+     public SongNetworkThread(String name) {
+         super(name);
+     }
+ 
++    public ITunesCollectionSong getSongs() { return collectionSong; }
++
++    public void setAlbumId(Integer albumId) {
++        this.albumId = albumId;
++    }
++
+     @Override
+     public void run() {
+         super.run();
++        try {
++            URL url = new URL("https://itunes.apple.com/lookup?id="+ albumId +"&entity=song");
++            readStream(url);
++            collectionSong = new JSONParser().parse(responseRawData, ITunesCollectionSong.class);
++        } catch (MalformedURLException e) {
++            e.printStackTrace();
++        } catch (IOException e) {
++            e.printStackTrace();
++            callback.outputMessageNoConnection();
++        }
+     }
+ }
+Index: app/src/main/java/com/example/jaroslav/taskfromforasoft/AlbumListActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.jaroslav.taskfromforasoft;\n\nimport android.graphics.Bitmap;\nimport android.support.v7.app.AppCompatActivity;\nimport android.os.Bundle;\nimport android.support.v7.widget.GridLayoutManager;\nimport android.support.v7.widget.RecyclerView;\nimport android.view.View;\nimport android.widget.ProgressBar;\nimport android.widget.TextView;\n\nimport com.example.jaroslav.taskfromforasoft.networkthread.AlbumNetworkThread;\nimport com.example.jaroslav.taskfromforasoft.networkthread.NetworkThread;\n\npublic class AlbumListActivity extends AppCompatActivity implements AlbumNetworkThread.Callback {\n    RecyclerView recyclerView;\n    TextView textError;\n    ProgressBar progressBarList;\n    AlbumNetworkThread network;\n    Bundle bundle;\n\n    @Override\n    protected void onCreate(Bundle savedInstanceState) {\n        super.onCreate(savedInstanceState);\n        setContentView(R.layout.activity_album_list);\n        network = new AlbumNetworkThread(\"network\");\n        network.setArtistName(getIntent().getStringExtra(\"nameArtist\"));\n        network.setCallback(this);\n        network.start();\n        textError = findViewById(R.id.textError);\n        progressBarList = findViewById(R.id.progressBarList);\n        recyclerView = findViewById(R.id.recyclerView);\n        recyclerView.setLayoutManager(new GridLayoutManager(this,1));\n    }\n\n    @Override\n    public void onRestoreInstanceState(Bundle savedInstanceState) {\n        super.onRestoreInstanceState(savedInstanceState);\n        bundle = savedInstanceState;\n        AlbumAdapter adapter = new AlbumAdapter();\n        adapter.setAlbumName(bundle.getStringArrayList(\"albumName\"));\n        adapter.setAlbumPhoto(bundle.<Bitmap>getParcelableArrayList(\"albumPhoto\"));\n        adapter.setAlbumIDs(bundle.getIntegerArrayList(\"albumIDs\"));\n        progressBarList = findViewById(R.id.progressBarList);\n        progressBarList.setVisibility(View.INVISIBLE);\n        recyclerView = findViewById(R.id.recyclerView);\n        recyclerView.setLayoutManager(new GridLayoutManager(this,1));\n        recyclerView.setAdapter(adapter);\n    }\n\n    @Override\n    public void onSaveInstanceState(Bundle savedInstanceState) {\n        super.onSaveInstanceState(savedInstanceState);\n        savedInstanceState.putAll(bundle);\n    }\n\n    public void unloadData() {\n        recyclerView.post(new Runnable() {\n            @Override\n            public void run() {\n                progressBarList.setVisibility(View.INVISIBLE);\n                AlbumAdapter adapter = new AlbumAdapter(network.getAlbums());\n                recyclerView.setAdapter(adapter);\n                bundle = new Bundle();\n                bundle.putStringArrayList(\"albumName\", adapter.getAlbumName());\n                bundle.putParcelableArrayList(\"albumPhoto\",adapter.getAlbumPhoto());\n                bundle.putIntegerArrayList(\"albumIDs\", adapter.getAlbumIDs());\n            }\n        });\n    }\n\n    @Override\n    public void outputMessageNoConnection() {\n        textError.post(new Runnable() {\n            @Override\n            public void run() {\n                textError.setVisibility(View.VISIBLE);\n                textError.setText(R.string.connect_error);\n            }\n        });\n    }\n\n    @Override\n    public void outputMessageNoArtist() {\n        textError.post(new Runnable() {\n            @Override\n            public void run() {\n                textError.setVisibility(View.VISIBLE);\n                textError.setText(R.string.artist_error);\n            }\n        });\n    }\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/jaroslav/taskfromforasoft/AlbumListActivity.java	(revision 04e4d70728b3fc111420913258516fcb6e57f893)
++++ app/src/main/java/com/example/jaroslav/taskfromforasoft/AlbumListActivity.java	(date 1536008771025)
+@@ -1,23 +1,15 @@
+ package com.example.jaroslav.taskfromforasoft;
+ 
+-import android.graphics.Bitmap;
+-import android.support.v7.app.AppCompatActivity;
+ import android.os.Bundle;
+ import android.support.v7.widget.GridLayoutManager;
+-import android.support.v7.widget.RecyclerView;
+ import android.view.View;
+-import android.widget.ProgressBar;
+-import android.widget.TextView;
+ 
++import com.example.jaroslav.taskfromforasoft.adapter.AlbumAdapter;
+ import com.example.jaroslav.taskfromforasoft.networkthread.AlbumNetworkThread;
+-import com.example.jaroslav.taskfromforasoft.networkthread.NetworkThread;
+ 
+-public class AlbumListActivity extends AppCompatActivity implements AlbumNetworkThread.Callback {
+-    RecyclerView recyclerView;
+-    TextView textError;
+-    ProgressBar progressBarList;
++public class AlbumListActivity extends ListActivity{
+     AlbumNetworkThread network;
+-    Bundle bundle;
++//    Bundle bundle;
+ 
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
+@@ -27,67 +19,55 @@
+         network.setArtistName(getIntent().getStringExtra("nameArtist"));
+         network.setCallback(this);
+         network.start();
+-        textError = findViewById(R.id.textError);
+-        progressBarList = findViewById(R.id.progressBarList);
+-        recyclerView = findViewById(R.id.recyclerView);
+-        recyclerView.setLayoutManager(new GridLayoutManager(this,1));
+-    }
+-
+-    @Override
+-    public void onRestoreInstanceState(Bundle savedInstanceState) {
+-        super.onRestoreInstanceState(savedInstanceState);
+-        bundle = savedInstanceState;
+-        AlbumAdapter adapter = new AlbumAdapter();
+-        adapter.setAlbumName(bundle.getStringArrayList("albumName"));
+-        adapter.setAlbumPhoto(bundle.<Bitmap>getParcelableArrayList("albumPhoto"));
+-        adapter.setAlbumIDs(bundle.getIntegerArrayList("albumIDs"));
+-        progressBarList = findViewById(R.id.progressBarList);
+-        progressBarList.setVisibility(View.INVISIBLE);
+-        recyclerView = findViewById(R.id.recyclerView);
++        textError = findViewById(R.id.textErrorAlbum);
++        progressBar = findViewById(R.id.progressBarAlbum);
++        recyclerView = findViewById(R.id.recyclerViewAlbum);
+         recyclerView.setLayoutManager(new GridLayoutManager(this,1));
+-        recyclerView.setAdapter(adapter);
+     }
+-
+-    @Override
+-    public void onSaveInstanceState(Bundle savedInstanceState) {
+-        super.onSaveInstanceState(savedInstanceState);
+-        savedInstanceState.putAll(bundle);
+-    }
++//
++//    @Override
++//    public void onRestoreInstanceState(Bundle savedInstanceState) {
++//        super.onRestoreInstanceState(savedInstanceState);
++//        bundle = savedInstanceState;
++//        ListAdapter adapter = new ListAdapter();
++//        adapter.setAlbumName(bundle.getStringArrayList("albumName"));
++//        adapter.setAlbumPhoto(bundle.<Bitmap>getParcelableArrayList("albumPhoto"));
++//        adapter.setAlbumIDs(bundle.getIntegerArrayList("albumIDs"));
++//        progressBarList = findViewById(R.id.progressBarList);
++//        progressBarList.setVisibility(View.INVISIBLE);
++//        recyclerView = findViewById(R.id.recyclerView);
++//        recyclerView.setLayoutManager(new GridLayoutManager(this,1));
++//        recyclerView.setAdapter(adapter);
++//    }
++//
++//    @Override
++//    public void onSaveInstanceState(Bundle savedInstanceState) {
++//        super.onSaveInstanceState(savedInstanceState);
++//        savedInstanceState.putAll(bundle);
++//    }
+ 
+     public void unloadData() {
+         recyclerView.post(new Runnable() {
+             @Override
+             public void run() {
+-                progressBarList.setVisibility(View.INVISIBLE);
++                progressBar.setVisibility(View.INVISIBLE);
+                 AlbumAdapter adapter = new AlbumAdapter(network.getAlbums());
+                 recyclerView.setAdapter(adapter);
+-                bundle = new Bundle();
+-                bundle.putStringArrayList("albumName", adapter.getAlbumName());
+-                bundle.putParcelableArrayList("albumPhoto",adapter.getAlbumPhoto());
+-                bundle.putIntegerArrayList("albumIDs", adapter.getAlbumIDs());
++//                bundle = new Bundle();
++//                bundle.putStringArrayList("albumName", adapter.getAlbumName());
++//                bundle.putParcelableArrayList("albumPhoto",adapter.getAlbumPhoto());
++//                bundle.putIntegerArrayList("albumIDs", adapter.getAlbumIDs());
+             }
+         });
+     }
+ 
+     @Override
+     public void outputMessageNoConnection() {
+-        textError.post(new Runnable() {
+-            @Override
+-            public void run() {
+-                textError.setVisibility(View.VISIBLE);
+-                textError.setText(R.string.connect_error);
+-            }
+-        });
++        super.outputMessageNoConnection();
+     }
+ 
+     @Override
+     public void outputMessageNoArtist() {
+-        textError.post(new Runnable() {
+-            @Override
+-            public void run() {
+-                textError.setVisibility(View.VISIBLE);
+-                textError.setText(R.string.artist_error);
+-            }
+-        });
++        super.outputMessageNoArtist();
+     }
+ }
+Index: app/src/main/java/com/example/jaroslav/taskfromforasoft/ListActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/jaroslav/taskfromforasoft/ListActivity.java	(date 1536008770962)
++++ app/src/main/java/com/example/jaroslav/taskfromforasoft/ListActivity.java	(date 1536008770962)
+@@ -0,0 +1,41 @@
++package com.example.jaroslav.taskfromforasoft;
++
++import android.support.v7.app.AppCompatActivity;
++import android.support.v7.widget.RecyclerView;
++import android.view.View;
++import android.widget.ProgressBar;
++import android.widget.TextView;
++
++import com.example.jaroslav.taskfromforasoft.networkthread.AlbumNetworkThread;
++
++public class ListActivity extends AppCompatActivity implements AlbumNetworkThread.Callback {
++    RecyclerView recyclerView;
++    TextView textError;
++    ProgressBar progressBar;
++
++    @Override
++    public void unloadData() {
++    }
++
++    @Override
++    public void outputMessageNoConnection() {
++        textError.post(new Runnable() {
++            @Override
++            public void run() {
++                textError.setVisibility(View.VISIBLE);
++                textError.setText(R.string.connect_error);
++            }
++        });
++    }
++
++    @Override
++    public void outputMessageNoArtist() {
++        textError.post(new Runnable() {
++            @Override
++            public void run() {
++                textError.setVisibility(View.VISIBLE);
++                textError.setText(R.string.artist_error);
++            }
++        });
++    }
++}
+Index: app/src/main/java/com/example/jaroslav/taskfromforasoft/SongListActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.jaroslav.taskfromforasoft;\n\nimport android.support.v7.app.AppCompatActivity;\nimport android.os.Bundle;\n\npublic class SongListActivity extends AppCompatActivity {\n\n    @Override\n    protected void onCreate(Bundle savedInstanceState) {\n        super.onCreate(savedInstanceState);\n        setContentView(R.layout.activity_song_list);\n    }\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/jaroslav/taskfromforasoft/SongListActivity.java	(revision 04e4d70728b3fc111420913258516fcb6e57f893)
++++ app/src/main/java/com/example/jaroslav/taskfromforasoft/SongListActivity.java	(date 1536008771105)
+@@ -1,13 +1,52 @@
+ package com.example.jaroslav.taskfromforasoft;
+ 
+-import android.support.v7.app.AppCompatActivity;
+ import android.os.Bundle;
++import android.support.v7.widget.GridLayoutManager;
++import android.view.View;
+ 
+-public class SongListActivity extends AppCompatActivity {
++import com.example.jaroslav.taskfromforasoft.adapter.SongAdapter;
++import com.example.jaroslav.taskfromforasoft.networkthread.SongNetworkThread;
++
++public class SongListActivity extends ListActivity{
++    SongNetworkThread network;
+ 
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+         setContentView(R.layout.activity_song_list);
++        network = new SongNetworkThread("networkSong");
++        network.setCallback(this);
++        network.setAlbumId(getIntent().getIntExtra("albumID",0));
++        network.start();
++        textError = findViewById(R.id.textErrorSong);
++        progressBar = findViewById(R.id.progressBarSong);
++        recyclerView = findViewById(R.id.recyclerViewSong);
++        recyclerView.setLayoutManager(new GridLayoutManager(this,1));
++    }
++
++    @Override
++    public void unloadData() {
++        recyclerView.post(new Runnable() {
++            @Override
++            public void run() {
++                progressBar.setVisibility(View.INVISIBLE);
++                SongAdapter adapter = new SongAdapter(network.getSongs());
++                recyclerView.setAdapter(adapter);
++//                bundle = new Bundle();
++//                bundle.putStringArrayList("albumName", adapter.getAlbumName());
++//                bundle.putParcelableArrayList("albumPhoto",adapter.getAlbumPhoto());
++//                bundle.putIntegerArrayList("albumIDs", adapter.getAlbumIDs());
++            }
++        });
++    }
++
++    @Override
++    public void outputMessageNoConnection() {
++        super.outputMessageNoConnection();
++    }
++
++    @Override
++    public void outputMessageNoArtist() {
++        super.outputMessageNoArtist();
+     }
+ }
+Index: app/src/main/res/layout/activity_album_list.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<android.support.constraint.ConstraintLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\n    xmlns:tools=\"http://schemas.android.com/tools\"\n    android:layout_width=\"match_parent\"\n    android:layout_height=\"match_parent\"\n    tools:context=\".AlbumListActivity\">\n\n    <android.support.v7.widget.RecyclerView\n        android:id=\"@+id/recyclerView\"\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"match_parent\"\n        android:layout_marginBottom=\"8dp\"\n        android:scrollbars=\"vertical\"\n        app:layout_constraintBottom_toBottomOf=\"parent\"\n        app:layout_constraintEnd_toEndOf=\"parent\"\n        app:layout_constraintStart_toStartOf=\"parent\"\n        app:layout_constraintTop_toTopOf=\"parent\">\n\n    </android.support.v7.widget.RecyclerView>\n\n    <TextView\n        android:id=\"@+id/textError\"\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:layout_marginBottom=\"8dp\"\n        android:layout_marginEnd=\"8dp\"\n        android:layout_marginRight=\"8dp\"\n        android:text=\"@string/todo\"\n        android:visibility=\"invisible\"\n        app:layout_constraintBottom_toBottomOf=\"parent\"\n        app:layout_constraintEnd_toEndOf=\"parent\"\n        app:layout_constraintStart_toStartOf=\"parent\"\n        app:layout_constraintTop_toTopOf=\"parent\" />\n\n    <ProgressBar\n        android:id=\"@+id/progressBarList\"\n        style=\"?android:attr/progressBarStyle\"\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:layout_marginBottom=\"8dp\"\n        android:layout_marginEnd=\"8dp\"\n        android:layout_marginLeft=\"8dp\"\n        android:layout_marginRight=\"8dp\"\n        android:layout_marginStart=\"8dp\"\n        android:layout_marginTop=\"8dp\"\n        android:max=\"@android:integer/config_longAnimTime\"\n        android:visibility=\"visible\"\n        app:layout_constraintBottom_toBottomOf=\"parent\"\n        app:layout_constraintEnd_toEndOf=\"@+id/recyclerView\"\n        app:layout_constraintStart_toStartOf=\"@+id/recyclerView\"\n        app:layout_constraintTop_toTopOf=\"parent\" />\n</android.support.constraint.ConstraintLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/activity_album_list.xml	(revision 04e4d70728b3fc111420913258516fcb6e57f893)
++++ app/src/main/res/layout/activity_album_list.xml	(date 1536009018913)
+@@ -7,11 +7,12 @@
+     tools:context=".AlbumListActivity">
+ 
+     <android.support.v7.widget.RecyclerView
+-        android:id="@+id/recyclerView"
++        android:id="@+id/recyclerViewAlbum"
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+         android:layout_marginBottom="8dp"
+         android:scrollbars="vertical"
++        android:visibility="invisible"
+         app:layout_constraintBottom_toBottomOf="parent"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
+@@ -20,7 +21,7 @@
+     </android.support.v7.widget.RecyclerView>
+ 
+     <TextView
+-        android:id="@+id/textError"
++        android:id="@+id/textErrorAlbum"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_marginBottom="8dp"
+@@ -34,7 +35,7 @@
+         app:layout_constraintTop_toTopOf="parent" />
+ 
+     <ProgressBar
+-        android:id="@+id/progressBarList"
++        android:id="@+id/progressBarAlbum"
+         style="?android:attr/progressBarStyle"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+@@ -47,7 +48,7 @@
+         android:max="@android:integer/config_longAnimTime"
+         android:visibility="visible"
+         app:layout_constraintBottom_toBottomOf="parent"
+-        app:layout_constraintEnd_toEndOf="@+id/recyclerView"
+-        app:layout_constraintStart_toStartOf="@+id/recyclerView"
++        app:layout_constraintEnd_toEndOf="@+id/recyclerViewAlbum"
++        app:layout_constraintStart_toStartOf="@+id/recyclerViewAlbum"
+         app:layout_constraintTop_toTopOf="parent" />
+ </android.support.constraint.ConstraintLayout>
+\ No newline at end of file
+Index: app/src/main/res/layout/activity_song_list.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<android.support.constraint.ConstraintLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\n    xmlns:tools=\"http://schemas.android.com/tools\"\n    android:layout_width=\"match_parent\"\n    android:layout_height=\"match_parent\"\n    tools:context=\".SongListActivity\">\n\n    <ImageView\n        android:id=\"@+id/imageView\"\n        android:layout_width=\"125dp\"\n        android:layout_height=\"125dp\"\n        android:contentDescription=\"@string/todo\"\n        android:visibility=\"invisible\"\n        app:layout_constraintBottom_toTopOf=\"@+id/guidelineImgText\"\n        app:layout_constraintEnd_toEndOf=\"parent\"\n        app:layout_constraintStart_toStartOf=\"parent\"\n        app:layout_constraintTop_toTopOf=\"parent\"\n        app:srcCompat=\"?attr/colorAccent\" />\n\n    <android.support.constraint.Guideline\n        android:id=\"@+id/guidelineImgText\"\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:orientation=\"horizontal\"\n        app:layout_constraintGuide_begin=\"200dp\" />\n\n    <TextView\n        android:id=\"@+id/textView2\"\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:layout_marginBottom=\"8dp\"\n        android:layout_marginEnd=\"8dp\"\n        android:layout_marginLeft=\"8dp\"\n        android:layout_marginRight=\"8dp\"\n        android:layout_marginStart=\"8dp\"\n        android:layout_marginTop=\"8dp\"\n        android:text=\"@string/todo\"\n        android:visibility=\"invisible\"\n        app:layout_constraintBottom_toTopOf=\"@+id/guidelineTextRecycle\"\n        app:layout_constraintEnd_toEndOf=\"parent\"\n        app:layout_constraintStart_toStartOf=\"parent\"\n        app:layout_constraintTop_toTopOf=\"@+id/guidelineImgText\" />\n\n    <android.support.constraint.Guideline\n        android:id=\"@+id/guidelineTextRecycle\"\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:orientation=\"horizontal\"\n        app:layout_constraintGuide_begin=\"300dp\" />\n\n    <android.support.v7.widget.RecyclerView\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:layout_marginLeft=\"8dp\"\n        android:layout_marginStart=\"8dp\"\n        android:scrollbars=\"vertical\"\n        app:layout_constraintStart_toStartOf=\"parent\"\n        app:layout_constraintTop_toTopOf=\"@+id/guidelineTextRecycle\" />\n\n</android.support.constraint.ConstraintLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/activity_song_list.xml	(revision 04e4d70728b3fc111420913258516fcb6e57f893)
++++ app/src/main/res/layout/activity_song_list.xml	(date 1536008106476)
+@@ -6,6 +6,38 @@
+     android:layout_height="match_parent"
+     tools:context=".SongListActivity">
+ 
++    <TextView
++        android:id="@+id/textErrorSong"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:layout_marginBottom="8dp"
++        android:layout_marginEnd="8dp"
++        android:layout_marginLeft="8dp"
++        android:layout_marginRight="8dp"
++        android:layout_marginStart="8dp"
++        android:layout_marginTop="8dp"
++        android:text="@string/todo"
++        app:layout_constraintBottom_toBottomOf="parent"
++        app:layout_constraintEnd_toEndOf="parent"
++        app:layout_constraintStart_toStartOf="parent"
++        app:layout_constraintTop_toTopOf="parent" />
++
++    <ProgressBar
++        android:id="@+id/progressBarSong"
++        style="?android:attr/progressBarStyle"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:layout_marginBottom="8dp"
++        android:layout_marginEnd="8dp"
++        android:layout_marginLeft="8dp"
++        android:layout_marginRight="8dp"
++        android:layout_marginStart="8dp"
++        android:layout_marginTop="8dp"
++        app:layout_constraintBottom_toBottomOf="parent"
++        app:layout_constraintEnd_toEndOf="parent"
++        app:layout_constraintStart_toStartOf="parent"
++        app:layout_constraintTop_toTopOf="parent" />
++
+     <ImageView
+         android:id="@+id/imageView"
+         android:layout_width="125dp"
+@@ -50,6 +82,7 @@
+         app:layout_constraintGuide_begin="300dp" />
+ 
+     <android.support.v7.widget.RecyclerView
++        android:id="@+id/recyclerViewSong"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_marginLeft="8dp"
