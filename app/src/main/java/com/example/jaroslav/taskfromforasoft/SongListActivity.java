@@ -14,7 +14,8 @@ import com.example.jaroslav.taskfromforasoft.networkthread.SongNetworkThread;
 
 public class SongListActivity extends ListActivity{
     SongNetworkThread network;
-    LinearLayout linearLayout;
+    LinearLayout linearLayoutMain;
+    LinearLayout linearLayoutPhotoText;
     TextView mainTextSong;
     ImageView mainPhotoSong;
 
@@ -33,7 +34,8 @@ public class SongListActivity extends ListActivity{
         textError = findViewById(R.id.textErrorSong);
         progressBar = findViewById(R.id.progressBarSong);
         recyclerView = findViewById(R.id.recyclerViewSong);
-        linearLayout = findViewById(R.id.linearLayoutSong);
+        linearLayoutMain = findViewById(R.id.linearLayoutSongMain);
+        linearLayoutPhotoText = findViewById(R.id.linearLayoutSongPhotoText);
         createThisLayout();
         // set the adapter manager
         recyclerView.setLayoutManager(new GridLayoutManager(this,1));
@@ -42,10 +44,12 @@ public class SongListActivity extends ListActivity{
     private void createThisLayout(){
         mainTextSong.setText(getIntent().getStringExtra("mainTextSong"));
         mainPhotoSong.setImageBitmap((Bitmap) getIntent().getParcelableExtra("mainPhotoSong"));
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            linearLayout.setOrientation(LinearLayout.VERTICAL);
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            linearLayoutMain.setOrientation(LinearLayout.VERTICAL);
+            linearLayoutPhotoText.setOrientation(LinearLayout.HORIZONTAL);
         } else {
-            linearLayout.setOrientation(LinearLayout.HORIZONTAL);
+            linearLayoutMain.setOrientation(LinearLayout.HORIZONTAL);
+            linearLayoutPhotoText.setOrientation(LinearLayout.VERTICAL);
         }
     }
 
