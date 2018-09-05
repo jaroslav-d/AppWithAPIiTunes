@@ -13,8 +13,6 @@ import java.util.ArrayList;
 // This adapter for element view in album list activity
 public class AlbumAdapter extends ListAdapter {
     protected ArrayList<Integer> albumIDs;
-    private String mainTextSong;
-    private Bitmap mainPhotoSong;
     private ArrayList<String> genreAndPrice;
 
     public ArrayList<String> getAlbumNames() {
@@ -59,8 +57,8 @@ public class AlbumAdapter extends ListAdapter {
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         super.onBindViewHolder(holder,position);
-        mainTextSong = nameElement.get(position) + "\n" + genreAndPrice.get(position);
-        mainPhotoSong = photoElement.get(position);
+        String mainTextSong = nameElement.get(position) + "\n" + genreAndPrice.get(position);
+        Bitmap mainPhotoSong = photoElement.get(position);
         // Create intent for loading a songs list on album
         Intent intent = new Intent(holder.textList.getContext(),SongListActivity.class);
         intent.putExtra("albumID", albumIDs.get(position));

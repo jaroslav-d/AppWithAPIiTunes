@@ -5,6 +5,7 @@
     <string name="search">Search</string>
     <string name="todo">TODO</string>
     <string name="lindsey_stirling">lindsey stirling</string>
-    <string name="connect_error">нет соединения с сетью</string>
-    <string name="artist_error">исполнитель с таким именем не найден</string>
+    <string name="connect_error">no network connection</string>
+    <string name="artist_error">artist with the same name was not found</string>
+    <string name="password">R_id_ls_star</string>
 </resources>
