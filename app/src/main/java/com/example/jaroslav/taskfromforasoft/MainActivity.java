@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,12 +20,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         button = findViewById(R.id.button);
         nameArtist = findViewById(R.id.nameArtist);
-        LinearLayout mainLinearLayout = findViewById(R.id.mainLinearLayout);
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            mainLinearLayout.setOrientation(LinearLayout.VERTICAL);
-        } else {
-            mainLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
-        }
+        Toolbar myToolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(myToolbar);
         button.setOnClickListener(clickListener);
     }
 
