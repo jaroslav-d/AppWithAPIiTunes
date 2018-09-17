@@ -33,10 +33,6 @@ public class SongNetworkThread extends NetworkThread {
             readStream(url);
             // convert the data to the desired format for further processing
             collectionSong = new JSONParser().parse(responseRawData, ITunesCollectionSong.class);
-            // for the created model of the list of songs we load necessary pictures
-            for (ITunesItemSong itemSong : collectionSong.getAll()) {
-                itemSong.setPhoto(unloadPhoto(itemSong.getPhotoUrl()));
-            }
             // goes back to the activity that created it and launched
             callback.unloadData();
         } catch (MalformedURLException e) {

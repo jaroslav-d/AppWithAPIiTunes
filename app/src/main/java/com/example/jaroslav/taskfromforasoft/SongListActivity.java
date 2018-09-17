@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.example.jaroslav.taskfromforasoft.adapter.SongAdapter;
 import com.example.jaroslav.taskfromforasoft.networkthread.SongNetworkThread;
+import com.squareup.picasso.Picasso;
 
 public class SongListActivity extends ListActivity{
     SongNetworkThread network;
@@ -43,7 +44,8 @@ public class SongListActivity extends ListActivity{
 
     private void createThisLayout(){
         mainTextSong.setText(getIntent().getStringExtra("mainTextSong"));
-        mainPhotoSong.setImageBitmap((Bitmap) getIntent().getParcelableExtra("mainPhotoSong"));
+        //mainPhotoSong.setImageBitmap((Bitmap) getIntent().getParcelableExtra("mainPhotoSong"));
+        Picasso.get().load(getIntent().getStringExtra("mainPhotoSong")).into(mainPhotoSong);
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             linearLayoutMain.setOrientation(LinearLayout.VERTICAL);
             linearLayoutPhotoText.setOrientation(LinearLayout.HORIZONTAL);
@@ -67,15 +69,5 @@ public class SongListActivity extends ListActivity{
 
             }
         });
-    }
-
-    @Override
-    public void outputMessageNoConnection() {
-        super.outputMessageNoConnection();
-    }
-
-    @Override
-    public void outputMessageNoArtist() {
-        super.outputMessageNoArtist();
     }
 }

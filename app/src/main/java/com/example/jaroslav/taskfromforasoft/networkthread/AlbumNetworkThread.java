@@ -4,6 +4,7 @@ import com.example.jaroslav.taskfromforasoft.models.JSONParser;
 import com.example.jaroslav.taskfromforasoft.models.collection.ITunesCollectionAlbum;
 import com.example.jaroslav.taskfromforasoft.models.collection.ITunesCollectionArtist;
 import com.example.jaroslav.taskfromforasoft.models.item.ITunesItemAlbum;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -52,9 +53,8 @@ public class AlbumNetworkThread extends NetworkThread {
             readStream(url);
             // creates a data model for the list of albums
             collectionAlbum = new JSONParser().parse(responseRawData, ITunesCollectionAlbum.class);
-            // for the created model of the list of songs we load necessary pictures
-            for (ITunesItemAlbum itemAlbum : collectionAlbum.getAll()) {
-                itemAlbum.setPhoto(unloadPhoto(itemAlbum.getPhotoUrl()));
+            if (collectionAlbum.getCount() == 1) {
+                callback.outputMessageNoAlbumForArtist();
             }
             // goes back to the activity that created it and launched
             callback.unloadData();

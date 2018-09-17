@@ -12,10 +12,10 @@ public class SongAdapter extends ListAdapter {
     public SongAdapter(ITunesCollectionSong dataSong) {
         // Creates the necessary variables for the adapter on the page with the song list
         nameElement = new ArrayList<>();
-        photoElement = new ArrayList<>();
+        photoUrl = new ArrayList<>();
         for (ITunesItemSong itemSong : dataSong.getAll()) {
             nameElement.add(itemSong.getTrackName());
-            photoElement.add(itemSong.getPhoto());
+            photoUrl.add(itemSong.getPhotoUrl());
         }
     }
 

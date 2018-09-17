@@ -6,6 +6,7 @@ import android.view.View;
 
 import com.example.jaroslav.taskfromforasoft.adapter.AlbumAdapter;
 import com.example.jaroslav.taskfromforasoft.networkthread.AlbumNetworkThread;
+import com.squareup.picasso.Picasso;
 
 public class AlbumListActivity extends ListActivity{
     AlbumNetworkThread network;
@@ -63,15 +64,5 @@ public class AlbumListActivity extends ListActivity{
 //                bundle.putIntegerArrayList("albumIDs", adapter.getAlbumIDs());
             }
         });
-    }
-
-    @Override
-    public void outputMessageNoConnection() {
-        super.outputMessageNoConnection();
-    }
-
-    @Override
-    public void outputMessageNoArtist() {
-        super.outputMessageNoArtist();
     }
 }

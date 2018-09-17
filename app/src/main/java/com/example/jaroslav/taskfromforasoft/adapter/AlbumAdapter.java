@@ -2,11 +2,15 @@ package com.example.jaroslav.taskfromforasoft.adapter;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
 import com.example.jaroslav.taskfromforasoft.SongListActivity;
 import com.example.jaroslav.taskfromforasoft.models.collection.ITunesCollectionAlbum;
 import com.example.jaroslav.taskfromforasoft.models.item.ITunesItemAlbum;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -19,8 +23,8 @@ public class AlbumAdapter extends ListAdapter {
         return nameElement;
     }
 
-    public ArrayList<Bitmap> getAlbumPhotos() {
-        return photoElement;
+    public ArrayList<String> getAlbumPhotos() {
+        return photoUrl;
     }
 
     public ArrayList<Integer> getAlbumIDs() {
@@ -31,8 +35,8 @@ public class AlbumAdapter extends ListAdapter {
         this.nameElement = albumName;
     }
 
-    public void setAlbumPhotos(ArrayList<Bitmap> albumPhoto) {
-        this.photoElement = albumPhoto;
+    public void setAlbumPhotos(ArrayList<String> albumPhoto) {
+        this.photoUrl = albumPhoto;
     }
 
     public void setAlbumIDs(ArrayList<Integer> albumIDs) {
@@ -43,12 +47,12 @@ public class AlbumAdapter extends ListAdapter {
     public AlbumAdapter(ITunesCollectionAlbum dataAlbums) {
         // Creates the necessary variables for the adapter on the page with the album list
         nameElement = new ArrayList<>();
-        photoElement = new ArrayList<>();
+        photoUrl = new ArrayList<>();
         albumIDs = new ArrayList<>();
         genreAndPrice = new ArrayList<>();
         for (ITunesItemAlbum itemSong : dataAlbums.getAll()) {
             nameElement.add(itemSong.getAlbumName());
-            photoElement.add(itemSong.getPhoto());
+            photoUrl.add(itemSong.getPhotoUrl());
             albumIDs.add(itemSong.getAlbumId());
             genreAndPrice.add("Genre: " + itemSong.getGenre() + "\n" + "Price: " + itemSong.getPrice());
         }
@@ -58,12 +62,11 @@ public class AlbumAdapter extends ListAdapter {
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         super.onBindViewHolder(holder,position);
         String mainTextSong = nameElement.get(position) + "\n" + genreAndPrice.get(position);
-        Bitmap mainPhotoSong = photoElement.get(position);
         // Create intent for loading a songs list on album
         Intent intent = new Intent(holder.textList.getContext(),SongListActivity.class);
         intent.putExtra("albumID", albumIDs.get(position));
         intent.putExtra("mainTextSong",mainTextSong);
-        intent.putExtra("mainPhotoSong", mainPhotoSong);
+        intent.putExtra("mainPhotoSong", photoUrl.get(position));
         holder.setIntent(intent);
     }
 

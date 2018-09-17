@@ -42,4 +42,16 @@ public class ListActivity extends AppCompatActivity implements AlbumNetworkThrea
             }
         });
     }
+
+    @Override
+    public void outputMessageNoAlbumForArtist() {
+        textError.post(new Runnable() {
+            @Override
+            public void run() {
+                progressBar.setVisibility(View.INVISIBLE);
+                textError.setVisibility(View.VISIBLE);
+                textError.setText(R.string.album_error);
+            }
+        });
+    }
 }

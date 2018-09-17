@@ -27,6 +27,7 @@ public class NetworkThread extends Thread {
         void unloadData();
         void outputMessageNoConnection();
         void outputMessageNoArtist();
+        void outputMessageNoAlbumForArtist();
     }
 
     // set callback

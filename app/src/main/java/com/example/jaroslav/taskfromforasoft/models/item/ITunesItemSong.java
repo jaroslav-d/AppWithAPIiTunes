@@ -12,14 +12,6 @@ public class ITunesItemSong extends ITunesItem {
         return artworkUrl100;
     }
 
-    public void setPhoto(Bitmap photo) {
-        photoFromUrl100 = photo;
-    }
-
-    public Bitmap getPhoto() {
-        return photoFromUrl100;
-    }
-
     public int getSongId() { return getCollectionId(); }
 
     public String getTrackName() {

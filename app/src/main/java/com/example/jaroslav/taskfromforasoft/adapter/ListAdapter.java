@@ -1,20 +1,18 @@
 package com.example.jaroslav.taskfromforasoft.adapter;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.jaroslav.taskfromforasoft.R;
-import com.example.jaroslav.taskfromforasoft.models.collection.ITunesCollectionAlbum;
-import com.example.jaroslav.taskfromforasoft.models.collection.ITunesCollectionSong;
-import com.example.jaroslav.taskfromforasoft.models.item.ITunesItemAlbum;
-import com.example.jaroslav.taskfromforasoft.models.item.ITunesItemSong;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.PicassoProvider;
 
 import java.util.ArrayList;
 
@@ -24,7 +22,7 @@ import java.util.ArrayList;
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.MyViewHolder> {
 
     protected ArrayList<String> nameElement;
-    protected ArrayList<Bitmap> photoElement;
+    protected ArrayList<String> photoUrl;
 
     public ListAdapter(){}
 
@@ -79,9 +77,9 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.MyViewHolder> 
         // - get element from dataset at this position
         // - replace the contents of the view with that element
         holder.textList.setText(nameElement.get(position));
-        if (photoElement.get(position) != null) {
-            holder.imageList.setImageBitmap(photoElement.get(position));
-            holder.imageList.setVisibility(View.VISIBLE);
+        if (photoUrl.get(position) != null) {
+            Picasso.get().load(photoUrl.get(position)).into(holder.imageList);
+            //holder.imageList.setVisibility(View.VISIBLE);
         }
     }
 

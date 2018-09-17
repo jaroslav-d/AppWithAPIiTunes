@@ -7,5 +7,7 @@
     <string name="lindsey_stirling">lindsey stirling</string>
     <string name="connect_error">no network connection</string>
     <string name="artist_error">artist with the same name was not found</string>
+    <string name="album_error">for this artist the album was not found</string>
     <string name="password">R_id_ls_star</string>
+    <string name="test">hello world</string>
 </resources>
