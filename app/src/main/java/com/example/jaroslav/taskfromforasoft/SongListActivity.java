@@ -1,12 +1,9 @@
 package com.example.jaroslav.taskfromforasoft;
 
-import android.content.res.Configuration;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.jaroslav.taskfromforasoft.adapter.SongAdapter;
@@ -15,8 +12,6 @@ import com.squareup.picasso.Picasso;
 
 public class SongListActivity extends ListActivity{
     SongNetworkThread network;
-    LinearLayout linearLayoutMain;
-    LinearLayout linearLayoutPhotoText;
     TextView mainTextSong;
     ImageView mainPhotoSong;
 
@@ -35,8 +30,6 @@ public class SongListActivity extends ListActivity{
         textError = findViewById(R.id.textErrorSong);
         progressBar = findViewById(R.id.progressBarSong);
         recyclerView = findViewById(R.id.recyclerViewSong);
-        linearLayoutMain = findViewById(R.id.linearLayoutSongMain);
-        linearLayoutPhotoText = findViewById(R.id.linearLayoutSongPhotoText);
         createThisLayout();
         // set the adapter manager
         recyclerView.setLayoutManager(new GridLayoutManager(this,1));
@@ -44,15 +37,7 @@ public class SongListActivity extends ListActivity{
 
     private void createThisLayout(){
         mainTextSong.setText(getIntent().getStringExtra("mainTextSong"));
-        //mainPhotoSong.setImageBitmap((Bitmap) getIntent().getParcelableExtra("mainPhotoSong"));
         Picasso.get().load(getIntent().getStringExtra("mainPhotoSong")).into(mainPhotoSong);
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            linearLayoutMain.setOrientation(LinearLayout.VERTICAL);
-            linearLayoutPhotoText.setOrientation(LinearLayout.HORIZONTAL);
-        } else {
-            linearLayoutMain.setOrientation(LinearLayout.HORIZONTAL);
-            linearLayoutPhotoText.setOrientation(LinearLayout.VERTICAL);
-        }
     }
 
     @Override
@@ -66,7 +51,6 @@ public class SongListActivity extends ListActivity{
                 mainPhotoSong.setVisibility(View.VISIBLE);
                 SongAdapter adapter = new SongAdapter(network.getSongs());
                 recyclerView.setAdapter(adapter);
-
             }
         });
     }
